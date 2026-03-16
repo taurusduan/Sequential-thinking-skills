@@ -1,11 +1,27 @@
 {
-  "name": "sequential-thinking-skills",
+  "name": "sequential-thinking-cli",
   "version": "0.1.0",
-  "private": true,
+  "description": "AI-first sequential thinking CLI with guided step progression, convergence control, replay, and export.",
   "type": "module",
+  "license": "MIT",
   "packageManager": "pnpm@10.6.5",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
     "sthink": "dist/cli/index.js"
+  },
+  "keywords": [
+    "cli",
+    "agent",
+    "ai",
+    "sequential-thinking",
+    "reasoning"
+  ],
+  "engines": {
+    "node": ">=20"
   },
   "scripts": {
     "build": "pnpm clean && tsc -p tsconfig.build.json",

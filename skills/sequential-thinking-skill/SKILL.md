@@ -75,7 +75,7 @@ license: MIT
 在使用前，应先确保本地已安装对应 CLI：
 
 ```bash
-pnpm add -g sequential-thinking-skills
+pnpm add -g sequential-thinking-cli
 ```
 
 安装后，使用 `sthink` 作为命令入口。
