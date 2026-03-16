@@ -7,10 +7,11 @@ import { advanceStep } from '../src/runtime/advance-step.js';
 import { startSession } from '../src/runtime/start-session.js';
 import { readSessionState } from '../src/storage/read-session.js';
 import { exportReplayToDirectory, loadCompletedSession, writeReplayMarkdown } from '../src/storage/replay-store.js';
+import { resolveSessionPath } from '../src/storage/runtime-path.js';
 
 export async function run(argv: string[] = process.argv.slice(2)): Promise<void> {
   const parsed = parseArgs(argv);
-  const projectRoot = process.cwd();
+  const currentWorkingDirectory = process.cwd();
 
   if (parsed.command === 'start') {
     const name = parsed.options.name;
@@ -22,15 +23,12 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
       throw new Error('start requires --name --goal --mode --totalSteps');
     }
 
-    const result = await startSession(
-      {
-        name,
-        goal,
-        mode: mode as 'explore' | 'branch' | 'audit',
-        totalSteps: Number(totalSteps) as 5 | 8
-      },
-      projectRoot
-    );
+    const result = await startSession({
+      name,
+      goal,
+      mode: mode as 'explore' | 'branch' | 'audit',
+      totalSteps: Number(totalSteps) as 5 | 8
+    });
 
     process.stdout.write(`${formatStartOutput(result.session, result.nextStepPolicy)}\n`);
     return;
@@ -48,7 +46,8 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
       throw new Error('step requires --content');
     }
 
-    const session = await readSessionState(path.resolve(projectRoot, sessionPath));
+    const resolvedSessionPath = await resolveSessionPath(sessionPath, currentWorkingDirectory);
+    const session = await readSessionState(resolvedSessionPath);
     const result = await advanceStep(session, {
       content
     });
@@ -59,13 +58,13 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
 
   if (parsed.command === 'replay') {
     const sessionPath = parsed.options.sessionPath;
-    const exportDir = parsed.options.exportDir ? path.resolve(projectRoot, parsed.options.exportDir) : projectRoot;
+    const exportDir = parsed.options.exportDir ? path.resolve(currentWorkingDirectory, parsed.options.exportDir) : currentWorkingDirectory;
 
     if (!sessionPath) {
       throw new Error('replay requires --sessionPath');
     }
 
-    const absoluteSessionPath = path.resolve(projectRoot, sessionPath);
+    const absoluteSessionPath = await resolveSessionPath(sessionPath, currentWorkingDirectory);
     const session = await loadCompletedSession(absoluteSessionPath);
     const replayPath = await writeReplayMarkdown(absoluteSessionPath, session);
     const exportedPath = await exportReplayToDirectory(session, exportDir);

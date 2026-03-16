@@ -54,7 +54,7 @@ graph TD
 
 ### Phase 1: Foundation (基础协议)
 
-- [ ] **T1.1.1** [REQ-001]: 定义启动输入、会话状态与单步记录 schema
+- [x] **T1.1.1** [REQ-001]: 定义启动输入、会话状态与单步记录 schema
   - **描述**: 使用 `Zod` 建立 `start` 输入、会话状态、单步记录与完成态的统一 schema，并形成共享类型导出。
   - **输入**: `.anws/v1/01_PRD.md` 的最小输入契约；`.anws/v1/03_ADR/ADR_001_TECH_STACK.md` 的 TypeScript + Zod 决策；`.anws/v1/03_ADR/ADR_002_RUNTIME_PROTOCOL.md` 的动作边界。
   - **输出**: `src/types/` 与 `src/protocol/` 下的 schema/type 文件；可复用的 `StartInputSchema`、`SessionSchema`、`StepRecordSchema`。
@@ -73,7 +73,7 @@ graph TD
   - **估时**: 4h
   - **依赖**: 无
 
-- [ ] **T1.1.2** [REQ-002]: 定义模式引导与收敛策略规则表
+- [x] **T1.1.2** [REQ-002]: 定义模式引导与收敛策略规则表
   - **描述**: 将 `explore`、`branch`、`audit` 的阶段引导、5/8 步收敛阈值与最终步行为整理为可调用的规则表或纯函数。
   - **输入**: T1.1.1 产出的 schema/type；`.anws/v1/02_ARCHITECTURE_OVERVIEW.md` 的模式行为与收敛控制章节。
   - **输出**: `src/protocol/mode-policy.ts` 或等效文件；可返回 `phaseHint`、`shouldConverge`、`mustConclude` 的纯逻辑接口。
@@ -94,7 +94,7 @@ graph TD
 
 ### Phase 2: Core (协议输出)
 
-- [ ] **T1.2.1** [REQ-005]: 定义 replay 文本渲染契约
+- [x] **T1.2.1** [REQ-005]: 定义 replay 文本渲染契约
   - **描述**: 明确 `replay.md` 与导出到当前目录的 Markdown 结构，包括会话元信息、步骤摘要、收敛标记与最终结论段落。
   - **输入**: T1.1.1 产出的会话/步骤 schema；`.anws/v1/02_ARCHITECTURE_OVERVIEW.md` 的存储策略与回放要求；INT-S1 通过后的真实会话样本。
   - **输出**: `src/replay/replay-template.ts` 或等效模板文件；稳定的 replay Markdown 结构约定。
@@ -116,9 +116,9 @@ graph TD
 ### Phase 3: Polish (协议回写)
 
 - [x] **T1.3.1** [REQ-006]: 基于真实 CLI 行为重写 `sequential-thinking` skill
-  - **描述**: 在 CLI 主路径稳定后，将 `.windsurf/skills/sequential-thinking/SKILL.md` 改写为与真实运行协议一致的 AI-first 手册，避免继续停留在 JSON 示例层。
+  - **描述**: 在 CLI 主路径稳定后，将 `sequential-thinking` skill 改写为与真实运行协议一致的 AI-first 手册，重点说明思想、触发条件、模式选择、npm 安装引导与调用边界，而不是停留在 JSON 示例层。
   - **输入**: T4.3.1 产出的稳定 CLI 行为；T1.2.1 产出的 replay 契约；`.windsurf/workflows/craft.md` 的写作风格。
-  - **输出**: 更新后的 `.windsurf/skills/sequential-thinking/SKILL.md`。
+  - **输出**: 更新后的 skill 文档，明确通过 npm 安装 CLI 并以 `sthink` 作为命令入口。
   - **验收标准**:
     - Given CLI 主路径已稳定
     - When 阅读新的 skill 文档
@@ -138,7 +138,7 @@ graph TD
 
 ### Phase 1: Foundation (工程初始化)
 
-- [ ] **T2.1.1** [REQ-006]: 初始化 CLI 工程骨架与基础脚本
+- [x] **T2.1.1** [REQ-006]: 初始化 CLI 工程骨架与基础脚本
   - **描述**: 建立 `pnpm + TypeScript + Vitest` 工程骨架，创建 `cli/`、`src/`、`tests/` 目录与基础脚本。
   - **输入**: `.anws/v1/03_ADR/ADR_001_TECH_STACK.md` 的技术栈决策；`.anws/v1/02_ARCHITECTURE_OVERVIEW.md` 的最小工程结构；T1.1.1 对目录划分的 schema 需求。
   - **输出**: `package.json`、`tsconfig.json`、基础目录结构、可运行的测试与构建脚本。
@@ -159,7 +159,7 @@ graph TD
 
 ### Phase 2: Core (会话推进)
 
-- [ ] **T2.2.1** [REQ-001]: 实现 `start` 会话创建服务
+- [x] **T2.2.1** [REQ-001]: 实现 `start` 会话创建服务
   - **描述**: 实现基于最小输入创建会话的 runtime 服务，负责生成初始状态、首步上下文与默认存储路径。
   - **输入**: T1.1.1 产出的 `StartInputSchema` 和 `SessionSchema`；T1.1.2 产出的模式与收敛规则；T2.1.1 产出的工程骨架。
   - **输出**: `src/runtime/start-session.ts` 或等效服务；可供 CLI 调用的会话创建接口。
@@ -178,7 +178,7 @@ graph TD
   - **估时**: 4h
   - **依赖**: T2.1.1, T1.1.2
 
-- [ ] **T2.2.2** [REQ-002]: 实现 `step` 推进服务与阶段提示注入
+- [x] **T2.2.2** [REQ-002]: 实现 `step` 推进服务与阶段提示注入
   - **描述**: 实现单步推进逻辑，接收 `content`，自动补全上下文，更新 `currentStep`、`phaseHint`、`shouldConverge` 与 `mustConclude`。
   - **输入**: T2.2.1 产出的会话创建接口；T1.1.2 产出的模式规则；T3.1.1 产出的存储初始化输出。
   - **输出**: `src/runtime/advance-step.ts` 或等效服务；更新后的会话状态与单步记录结构。
@@ -199,7 +199,7 @@ graph TD
 
 ### Phase 3: Integration (会话闭环)
 
-- [ ] **T2.3.1** [REQ-003]: 实现完成态判定与最终摘要生成
+- [x] **T2.3.1** [REQ-003]: 实现完成态判定与最终摘要生成
   - **描述**: 在 `step` 进入最后一步或完成态时，统一生成最终状态、摘要占位信息与供 `final.md` 使用的数据。
   - **输入**: T2.2.2 产出的更新会话状态与单步记录；`.anws/v1/03_ADR/ADR_002_RUNTIME_PROTOCOL.md` 中关于完成态、收敛与 `final.md` 的约束。
   - **输出**: `src/runtime/finalize-session.ts` 或等效完成态逻辑。
@@ -222,7 +222,7 @@ graph TD
 
 ### Phase 1: Foundation (存储初始化)
 
-- [ ] **T3.1.1** [REQ-004]: 实现会话目录与 `session.json` 初始化
+- [x] **T3.1.1** [REQ-004]: 实现会话目录与 `session.json` 初始化
   - **描述**: 根据会话名建立 `.anws/runtime/sequential-thinking/[session-name]/` 目录，并写入初始 `session.json`。
   - **输入**: T2.2.1 产出的初始会话状态；`.anws/v1/03_ADR/ADR_002_RUNTIME_PROTOCOL.md` 的存储决策与重名冲突策略。
   - **输出**: `src/storage/session-store.ts` 或等效模块；已创建的会话目录与 `session.json`。
@@ -243,7 +243,7 @@ graph TD
 
 ### Phase 2: Core (自动保存与归档)
 
-- [ ] **T3.2.1** [REQ-004]: 实现 `steps/{NN}.json` 自动保存与 `final.md` 归档
+- [x] **T3.2.1** [REQ-004]: 实现 `steps/{NN}.json` 自动保存与 `final.md` 归档
   - **描述**: 在每次 `step` 后自动保存单步记录，并在会话完成后生成 `final.md` 与最终 session 状态。
   - **输入**: T2.2.2 产出的单步记录；T2.3.1 产出的完成态数据；T3.1.1 产出的会话目录与 `session.json`。
   - **输出**: `steps/{NN}.json`、更新后的 `session.json`、`final.md`。
@@ -264,7 +264,7 @@ graph TD
 
 ### Phase 3: Integration (回放导出)
 
-- [ ] **T3.3.1** [REQ-005]: 实现 replay 读取与当前目录导出服务
+- [x] **T3.3.1** [REQ-005]: 实现 replay 读取与当前目录导出服务
   - **描述**: 读取已完成会话的 `session.json` 与 `steps/*.json`，生成 `replay.md`，并支持导出到当前目录。
   - **输入**: T1.2.1 产出的 replay 渲染契约；T3.2.1 产出的完整会话目录与步骤文件。
   - **输出**: `src/storage/replay-store.ts` 或等效模块；会话目录下的 `replay.md`；当前目录导出的 `[session-name]-replay.md`。
@@ -287,7 +287,7 @@ graph TD
 
 ### Phase 1: Core Commands (主路径命令)
 
-- [ ] **T4.1.1** [REQ-006]: 实现 `start` / `step` CLI 入口与最小参数解析
+- [x] **T4.1.1** [REQ-006]: 实现 `start` / `step` CLI 入口与最小参数解析
   - **描述**: 提供 CLI 主入口，支持 `start` 与 `step` 的参数接收、错误提示与 runtime 调用，不引入复杂命令框架。
   - **输入**: T2.1.1 产出的工程骨架；T2.2.1 的 `start` 服务；T2.2.2 的 `step` 服务；ADR-001 的原生 CLI 决策。
   - **输出**: `cli/index.ts` 与 `src/cli/` 下命令解析实现；可运行的 `start` / `step` CLI。
@@ -306,7 +306,7 @@ graph TD
   - **估时**: 5h
   - **依赖**: T2.2.2
 
-- [ ] **INT-S1** [MILESTONE]: S1 集成验证 — Guided Core
+- [x] **INT-S1** [MILESTONE]: S1 集成验证 — Guided Core
   - **描述**: 验证 Sprint 1 的退出标准，确认 CLI 已能从 `start` 到多次 `step` 完成基础会话推进，并正确自动保存。
   - **输入**: T1.1.1、T1.1.2、T2.1.1、T2.2.1、T2.2.2、T2.3.1、T3.1.1、T3.2.1、T4.1.1 的产出。
   - **输出**: S1 集成验证报告（通过/失败 + 问题清单）。
@@ -327,8 +327,8 @@ graph TD
 
 ### Phase 2: Replay & Release (回放与交付)
 
-- [ ] **T4.2.1** [REQ-005]: 实现 `replay` CLI 入口与导出选项
-  - **描述**: 提供 `replay` CLI 入口，读取会话名并触发 replay 生成与当前目录导出。
+- [x] **T4.2.1** [REQ-005]: 实现 `replay` CLI 入口与导出选项
+  - **描述**: 提供 `replay` CLI 入口，读取会话名并触发 replay 生成与当前目录导出；文档层需保证该能力可通过公开 CLI 入口被清晰调用。
   - **输入**: T3.3.1 产出的 replay 读取/导出服务；T4.1.1 的 CLI 主入口。
   - **输出**: 可运行的 `replay` CLI 命令；对应的终端输出与导出文件。
   - **验收标准**:
@@ -347,7 +347,7 @@ graph TD
   - **依赖**: T3.3.1, T4.1.1
 
 - [x] **T4.3.1** [REQ-006]: 建立 CLI 测试、构建与可执行交付路径
-  - **描述**: 补齐关键测试、构建配置与发布前检查，使 CLI 可以稳定编译、测试并生成可执行分发产物。
+  - **描述**: 补齐关键测试、构建配置与发布前检查，使 CLI 可以稳定编译、测试并生成可执行分发产物；对外交付口径收敛为 npm 安装与统一命令入口。
   - **输入**: T4.2.1 产出的完整主路径 CLI；ADR-001 的 `Vitest` 与 `dist/` 决策。
   - **输出**: 构建配置、关键集成测试、可执行构建产物、发布前检查脚本。
   - **验收标准**:
@@ -365,7 +365,7 @@ graph TD
   - **估时**: 4h
   - **依赖**: T4.2.1
 
-- [ ] **INT-S2** [MILESTONE]: S2 集成验证 — Replay Finish
+- [x] **INT-S2** [MILESTONE]: S2 集成验证 — Replay Finish
   - **描述**: 验证 Sprint 2 的退出标准，确认 replay 可导出、CLI 可构建，且 skill 文档已对齐真实行为。
   - **输入**: T1.2.1、T1.3.1、T3.3.1、T4.2.1、T4.3.1 的产出。
   - **输出**: S2 集成验证报告（通过/失败 + 问题清单）。
