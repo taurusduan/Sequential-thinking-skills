@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "cliVersion": "2.0.0",
-  "generatedAt": "2026-03-16T01:42:54.534Z",
+  "cliVersion": "2.0.5",
+  "generatedAt": "2026-03-21T04:17:47.247Z",
   "targets": [
     {
       "targetId": "windsurf",
       "targetLabel": "Windsurf",
-      "installedVersion": "2.0.0",
+      "installedVersion": "2.0.5",
       "managedFiles": [
         "AGENTS.md",
         ".windsurf/workflows/blueprint.md",
@@ -96,6 +96,6 @@
       "windsurf"
     ],
     "failedTargets": [],
-    "updatedAt": "2026-03-16T01:42:54.534Z"
+    "updatedAt": "2026-03-21T04:17:47.247Z"
   }
 }
