@@ -1,6 +1,6 @@
 {
   "name": "sequential-thinking-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "AI-first sequential thinking CLI with guided step progression, convergence control, replay, and export.",
   "type": "module",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "LICENSE"
   ],
   "bin": {
-    "sthink": "dist/cli/index.js"
+    "sthink": "dist/cli/bin.js"
   },
   "keywords": [
     "cli",
@@ -25,6 +25,7 @@
   },
   "scripts": {
     "build": "pnpm clean && tsc -p tsconfig.build.json",
+    "prepare": "pnpm build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

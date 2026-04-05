@@ -1,7 +1,5 @@
-#!/usr/bin/env node
 import path from 'node:path';
 import process from 'node:process';
-import { fileURLToPath } from 'node:url';
 
 import { parseArgs } from '../src/cli/args.js';
 import { formatStartOutput, formatStepOutput } from '../src/cli/format-output.js';
@@ -115,13 +113,6 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
   throw new Error(`Unsupported command: ${parsed.command || '<empty>'}`);
 }
 
-const entryFile = process.argv[1];
-const moduleFile = fileURLToPath(import.meta.url);
-
-if (entryFile && path.resolve(entryFile) === path.resolve(moduleFile)) {
-  run().catch((error: unknown) => {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    process.stderr.write(`${message}\n`);
-    process.exitCode = 1;
-  });
+export async function runFromProcessArgv(argv: string[] = process.argv): Promise<void> {
+  await run(argv.slice(2));
 }
